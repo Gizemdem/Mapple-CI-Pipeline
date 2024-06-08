@@ -33,8 +33,7 @@ class Result:
 Important: this contains the results of the runs
 """
 test_cases: list[Result] = []
-initialized = False
-current_object : Base
+current_object : Base = None
 
 class Chainable:
     def __init__(self, data):
@@ -139,8 +138,11 @@ class Chainable:
 def init(obj: Base):
     global current_object
     current_object = obj
-    global initialized
-    initialized = True
+    return
+
+def initialized() -> bool:
+    global current_object
+    return current_object is None
 
 
 def get(*args) -> Chainable:
@@ -151,8 +153,7 @@ def get(*args) -> Chainable:
     global test_cases
     test_cases[-1].selected[args[0]] = args[1]
     
-    global initialized
-    if not initialized:
+    if not initialized():
         last_commit = get_last_obj()
     else:
         last_commit = get_current()
