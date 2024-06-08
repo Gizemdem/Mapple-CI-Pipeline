@@ -11,6 +11,7 @@ from speckle_automate import (
 )
 
 from flatten import flatten_base
+import maple as mp
 
 
 class FunctionInputs(AutomateBase):
@@ -47,34 +48,36 @@ def automate_function(
     """
     # the context provides a conveniet way, to receive the triggering version
     version_root_object = automate_context.receive_version()
+    mp.init(version_root_object)
 
-    objects_with_forbidden_speckle_type = [
-        b
-        for b in flatten_base(version_root_object)
-        if b.speckle_type == function_inputs.forbidden_speckle_type
-    ]
-    count = len(objects_with_forbidden_speckle_type)
+    from maple_test import spec_a, spec_b, spec_c, spec_d, spec_e, spec_f, spec_g
 
-    if count > 0:
-        # this is how a run is marked with a failure cause
-        automate_context.attach_error_to_objects(
-            category="Forbidden speckle_type"
-            f" ({function_inputs.forbidden_speckle_type})",
-            object_ids=[o.id for o in objects_with_forbidden_speckle_type if o.id],
-            message="This project should not contain the type: "
-            f"{function_inputs.forbidden_speckle_type}",
-        )
-        automate_context.mark_run_failed(
-            "Automation failed: "
-            f"Found {count} object that have one of the forbidden speckle types: "
-            f"{function_inputs.forbidden_speckle_type}"
-        )
+    mp.run(spec_a, spec_b, spec_c, spec_d, spec_e, spec_f, spec_g)
 
-        # set the automation context view, to the original model / version view
-        # to show the offending objects
-        automate_context.set_context_view()
+    failed = False
+    for case in mp.test_cases:
+        assertions = case.assertions
+        for assertion in assertions:
+            if len(assertion.failed) > 0:
+                failed = True
+                # this is how a run is marked with a failure cause
+                automate_context.attach_error_to_objects(
+                    category=case.spec_name,
+                    object_ids=assertion.failed,
+                    message=f"{case.spec_name} has failed."
+                    f"Found {len(assertion.failed)} objects that don't "
+                    f"{assertion.assertion_type}",
+                )
+                automate_context.mark_run_failed(
+                    "Test case failed: "
+                    f"Found {len(assertion.failed)} objects that don't "
+                    f"{assertion.assertion_type}"
+            )
 
-    else:
+                # set the automation context view, to the original model / version view
+                # to show the offending objects
+                automate_context.set_context_view()
+    if not failed:
         automate_context.mark_run_success("No forbidden types found.")
 
     # if the function generates file results, this is how it can be
