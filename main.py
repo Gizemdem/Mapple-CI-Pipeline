@@ -22,20 +22,21 @@ class FunctionInputs(AutomateBase):
     https://docs.pydantic.dev/latest/usage/models/
     """
 
-    # an example how to use secret values
-    whisper_message: SecretStr = Field(title="This is a secret message")
-    forbidden_speckle_type: str = Field(
-        title="Forbidden speckle type",
-        description=(
-            "If a object has the following speckle_type,"
-            " it will be marked with an error."
-        ),
-    )
+    read_only: str = Field(
+        default="Placeholder",
+        title="Automated Test Cases",
+        description=( "checks window height is greater than 2600 mm"
+                    "validates SIP 202mm wall type area is greater than 43 m2"
+                    "checks pipes OmniClass value" 
+                    "validates basic roof`s thermal mass"
+                    "validates columns assembly type."
+                    "validates ceiling thickness is 50"
+                    "checks there are exactly 55 walls" ) 
+    ) 
 
 
 def automate_function(
     automate_context: AutomationContext,
-    function_inputs: FunctionInputs,
 ) -> None:
     """This is an example Speckle Automate function.
 

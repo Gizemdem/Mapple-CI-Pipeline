@@ -19,7 +19,7 @@ def spec_b():
         .should('be.greater', 43)
 
 def spec_c():
-    mp.it("checks pipe radius")
+    mp.it("checks pipe OmniClass value")
 
     mp.get('category', 'Plumbing Fixtures').its('OmniClass Title').should('have.value', 'Bathtubs')
 
@@ -44,7 +44,7 @@ def spec_f():
     
 
 def spec_g():
-    mp.it("Checks there are exactly 55 walls")
+    mp.it("checks there are exactly 55 walls")
 
     mp.get('category', 'Walls')\
         .should('have.length', 55)
