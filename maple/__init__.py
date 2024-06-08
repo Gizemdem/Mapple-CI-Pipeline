@@ -139,8 +139,10 @@ class Chainable:
 def init(obj: Base):
     global current_object
     current_object = obj
+    global initialized
+    initialized = True
 
-    
+
 def get(*args) -> Chainable:
     """Mostly do speckle queries and then
     save them inside the Chainable object"""
