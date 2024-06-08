@@ -1,0 +1,20 @@
+{
+  "speckleToken": "YOUR SPEKCLE TOKEN",
+  "functionInputs": {
+    "whisperMessage": "you are doing something weird",
+    "forbiddenSpeckleType": "wall"
+  },
+  "automationRunData": {
+    "project_id": "project id",
+    "speckle_server_url": "https://latest.speckle.systems",
+    "automation_id": "automation id",
+    "automation_run_id": "automation run id",
+    "function_run_id": "function run id",
+    "triggers": [
+      {
+        "payload": { "modelId": "model id", "versionId": "version id" },
+        "triggerType": "versionCreation"
+      }
+    ]
+  }
+}
