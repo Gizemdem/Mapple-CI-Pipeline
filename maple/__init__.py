@@ -140,9 +140,6 @@ def init(obj: Base):
     current_object = obj
     return
 
-def initialized() -> bool:
-    global current_object
-    return current_object is None
 
 
 def get(*args) -> Chainable:
@@ -153,10 +150,11 @@ def get(*args) -> Chainable:
     global test_cases
     test_cases[-1].selected[args[0]] = args[1]
     
-    if not initialized():
+    global current_object
+    if current_object is None:
         last_commit = get_last_obj()
     else:
-        last_commit = get_current()
+        last_commit = current_object
 
     objs = list(flatten_base(last_commit))
 
@@ -184,12 +182,6 @@ def get_last_obj():
         obj_id=last_obj_id, remote_transport=transport)
     return last_obj
 
-def get_current():
-    """
-    Gets the object which was initialized before
-    """
-    global current_obj
-    return current_obj
 
 def it(test_name):
     """
