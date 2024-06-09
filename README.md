@@ -1,4 +1,12 @@
-# Speckle Automate function template - Python
+# Maple test library - Speckle Automate Maple test function template
+
+### Automate your model Quality Check with Speckle and Maple
+
+[Maple](https://github.com/andrsbtrg/mapple_test) is a library designed to write simple code that can check different attributes of a Model in Speckle.
+
+Using Maple you can write `test specs` that check any parameter or quantity inside the project model.
+
+`Maple` can be integrated into [Speckle Automate]() to run the quality check tests on a continuous integration and ensure project standards.
 
 This is a template repository for a Speckle Automate functions written in python
 using the [specklepy](https://pypi.org/project/specklepy/) SDK to interact with Speckle data.
@@ -8,7 +16,7 @@ Also has some sane defaults for a development environment setups.
 
 ## Getting started
 
-1. Use this template repository to create a new repository in your own / organization's profile.
+1. Clone this repository and use to it to publish your own automation
 
 Register the function 
 
