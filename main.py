@@ -56,31 +56,31 @@ def automate_function(
 
     mp.run(spec_a, spec_b, spec_c, spec_d, spec_e, spec_f, spec_g)
 
-    failed = False
+    failed_count = 0
     for case in mp.test_cases:
         assertions = case.assertions
         for assertion in assertions:
             if len(assertion.failed) > 0:
-                failed = True
+                failed_count += 1
                 # this is how a run is marked with a failure cause
                 automate_context.attach_error_to_objects(
                     category=case.spec_name,
                     object_ids=assertion.failed,
-                    message=f"{case.spec_name} has failed."
-                    f"Found {len(assertion.failed)} objects that don't "
-                    f"{assertion.assertion_type}",
+                    message=f"{case.spec_name}.\n"
+                    f"On {len(assertion.failed)} objects, assertion {assertion.assertion_type} failed.",
                 )
-                automate_context.mark_run_failed(
-                    "Test case failed: "
-                    f"Found {len(assertion.failed)} objects that don't "
-                    f"{assertion.assertion_type}"
-            )
 
-                # set the automation context view, to the original model / version view
-                # to show the offending objects
-                automate_context.set_context_view()
-    if not failed:
-        automate_context.mark_run_success("No forbidden types found.")
+    if failed_count > 0:
+        automate_context.mark_run_failed(
+                "Some tests failed: "
+                f"{failed_count} out of {len(mp.test_cases)} specs failed"
+                "See the Results for more information."
+        )
+        # set the automation context view, to the original model / version view
+        # to show the offending objects
+        automate_context.set_context_view()
+    else:
+        automate_context.mark_run_success("All tests passed :)")
 
     # if the function generates file results, this is how it can be
     # attached to the Speckle project / model
