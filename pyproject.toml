@@ -8,6 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.11"
 specklepy = "^2.19.5"
+maple-spec = "^0.0.2"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"

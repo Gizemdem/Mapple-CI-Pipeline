@@ -25,14 +25,14 @@ class FunctionInputs(AutomateBase):
     read_only: str = Field(
         default="Placeholder",
         title="Automated Test Cases",
-        description=( "checks window height is greater than 2600 mm"
-                    "validates SIP 202mm wall type area is greater than 43 m2"
-                    "checks pipes OmniClass value" 
-                    "validates basic roof`s thermal mass"
-                    "validates columns assembly type."
-                    "validates ceiling thickness is 50"
-                    "checks there are exactly 55 walls" ) 
-    ) 
+        description=("checks window height is greater than 2600 mm"
+                     "validates SIP 202mm wall type area is greater than 43 m2"
+                     "checks pipes OmniClass value"
+                     "validates basic roof`s thermal mass"
+                     "validates columns assembly type."
+                     "validates ceiling thickness is 50"
+                     "checks there are exactly 55 walls")
+    )
 
 
 def automate_function(
@@ -52,7 +52,7 @@ def automate_function(
     version_root_object = automate_context.receive_version()
     mp.init(version_root_object)
 
-    from maple_test import spec_a, spec_b, spec_c, spec_d, spec_e, spec_f, spec_g
+    from specs import spec_a, spec_b, spec_c, spec_d, spec_e, spec_f, spec_g
 
     mp.run(spec_a, spec_b, spec_c, spec_d, spec_e, spec_f, spec_g)
 
@@ -67,14 +67,15 @@ def automate_function(
                     category=case.spec_name,
                     object_ids=assertion.failed,
                     message=f"{case.spec_name}.\n"
-                    f"On {len(assertion.failed)} objects, assertion {assertion.assertion_type} failed.",
+                    f"On {len(assertion.failed)} objects, assertion {
+                        assertion.assertion_type} failed.",
                 )
 
     if failed_count > 0:
         automate_context.mark_run_failed(
-                "Some tests failed: "
-                f"{failed_count} out of {len(mp.test_cases)} specs failed"
-                "See the Results for more information."
+            "Some tests failed: "
+            f"{failed_count} out of {len(mp.test_cases)} specs failed"
+            "See the Results for more information."
         )
         # set the automation context view, to the original model / version view
         # to show the offending objects
