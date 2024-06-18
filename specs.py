@@ -23,8 +23,9 @@ def spec_b():
 def spec_c():
     mp.it("checks pipe OmniClass value")
 
-    mp.get('category', 'Plumbing Fixtures').its(
-        'OmniClass Title').should('have.value', 'Bathtubs')
+    mp.get('category', 'Plumbing Fixtures')\
+        .its('OmniClass Title')\
+        .should('have.value', 'Bathtubs')
 
 
 def spec_d():
@@ -32,14 +33,16 @@ def spec_d():
 
     mp.get('family', 'Basic Roof')\
         .where('type', 'SG Metal Panels roof')\
-        .its('Thermal Mass').should('be.equal', 20.512)
+        .its('Thermal Mass')\
+        .should('be.equal', 20.512)
 
 
 def spec_e():
     mp.it("validates columns assembly type.")
 
-    mp.get('family', 'M_Concrete-Round-Column with Drop Caps').its(
-        'Assembly Code').should('have.value', 'B10')
+    mp.get('family', 'M_Concrete-Round-Column with Drop Caps')\
+        .its('Assembly Code')\
+        .should('have.value', 'B10')
 
 
 def spec_f():
