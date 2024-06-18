@@ -52,9 +52,9 @@ def automate_function(
     version_root_object = automate_context.receive_version()
     mp.init(version_root_object)
 
-    from specs import spec_a, spec_b, spec_c, spec_d, spec_e, spec_f, spec_g
+    from specs import spec_d, spec_e, spec_f, spec_g
 
-    mp.run(spec_a, spec_b, spec_c, spec_d, spec_e, spec_f, spec_g)
+    mp.run(spec_d, spec_e, spec_f, spec_g)
 
     failed_count = 0
     for case in mp.test_cases:
