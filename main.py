@@ -9,8 +9,6 @@ from speckle_automate import (
     AutomationContext,
     execute_automate_function,
 )
-
-from flatten import flatten_base
 import maple as mp
 
 
@@ -25,13 +23,15 @@ class FunctionInputs(AutomateBase):
     read_only: str = Field(
         default="Placeholder",
         title="Automated Test Cases",
-        description=("checks window height is greater than 2600 mm"
-                     "validates SIP 202mm wall type area is greater than 43 m2"
-                     "checks pipes OmniClass value"
-                     "validates basic roof`s thermal mass"
-                     "validates columns assembly type."
-                     "validates ceiling thickness is 50"
-                     "checks there are exactly 55 walls")
+        description=(
+            "checks window height is greater than 2600 mm"
+            "validates SIP 202mm wall type area is greater than 43 m2"
+            "checks pipes OmniClass value"
+            "validates basic roof`s thermal mass"
+            "validates columns assembly type."
+            "validates ceiling thickness is 50"
+            "checks there are exactly 55 walls"
+        ),
     )
 
 
@@ -67,8 +67,7 @@ def automate_function(
                     category=case.spec_name,
                     object_ids=assertion.failed,
                     message=f"{case.spec_name}.\n"
-                    f"On {len(assertion.failed)} objects, assertion {
-                        assertion.assertion_type} failed.",
+                    f"On {len(assertion.failed)} objects, assertion {assertion.assertion_type} failed.",
                 )
 
     if failed_count > 0:
