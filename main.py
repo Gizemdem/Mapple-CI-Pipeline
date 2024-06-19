@@ -10,6 +10,8 @@ from speckle_automate import (
     execute_automate_function,
 )
 import maple as mp
+from inspect import getmembers, isfunction
+import httpimport
 
 
 class FunctionInputs(AutomateBase):
@@ -20,18 +22,10 @@ class FunctionInputs(AutomateBase):
     https://docs.pydantic.dev/latest/usage/models/
     """
 
-    read_only: str = Field(
+    url: str = Field(
         default="Placeholder",
-        title="Automated Test Cases",
-        description=(
-            "checks window height is greater than 2600 mm"
-            "validates SIP 202mm wall type area is greater than 43 m2"
-            "checks pipes OmniClass value"
-            "validates basic roof`s thermal mass"
-            "validates columns assembly type."
-            "validates ceiling thickness is 50"
-            "checks there are exactly 55 walls"
-        ),
+        title="Tests Specs Gist/Github",
+        description=("Please paste the url of test specs."),
     )
 
 
@@ -52,9 +46,11 @@ def automate_function(
     version_root_object = automate_context.receive_version()
     mp.init(version_root_object)
 
-    from specs import spec_d, spec_e, spec_f, spec_g
+    with httpimport.remote_repo(function_inputs.url):
+        import specs
 
-    mp.run(spec_d, spec_e, spec_f, spec_g)
+    funcs = [func[1] for func in getmembers(specs, isfunction)]
+    mp.run(*funcs)
 
     failed_count = 0
     for case in mp.test_cases:
@@ -85,16 +81,6 @@ def automate_function(
     # if the function generates file results, this is how it can be
     # attached to the Speckle project / model
     # automate_context.store_file_result("./report.pdf")
-
-
-def automate_function_without_inputs(automate_context: AutomationContext) -> None:
-    """A function example without inputs.
-
-    If your function does not need any input variables,
-     besides what the automation context provides,
-     the inputs argument can be omitted.
-    """
-    pass
 
 
 # make sure to call the function with the executor
