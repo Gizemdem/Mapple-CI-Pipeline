@@ -1,17 +1,18 @@
-"""This module contains the business logic of the function.
+"""
+This module contains the business logic of the function.
 
-Use the automation_context module to wrap your function in an Autamate context helper
+Use the automation_context module to wrap your function in an
+  Automate context helper
 """
 
-from pydantic import Field, SecretStr
+from pydantic import Field
 from speckle_automate import (
     AutomateBase,
     AutomationContext,
     execute_automate_function,
 )
 import maple as mp
-from inspect import getmembers, isfunction
-import httpimport
+from utils import get_funcs_from_url
 
 
 class FunctionInputs(AutomateBase):
@@ -46,11 +47,8 @@ def automate_function(
     version_root_object = automate_context.receive_version()
     mp.init(version_root_object)
 
-    with httpimport.remote_repo(function_inputs.url):
-        import specs
-
-    funcs = [func[1] for func in getmembers(specs, isfunction)]
-    mp.run(*funcs)
+    specs_functions = get_funcs_from_url(function_inputs.url)
+    mp.run(*specs_functions)
 
     failed_count = 0
     for case in mp.test_cases:
@@ -62,8 +60,7 @@ def automate_function(
                 automate_context.attach_error_to_objects(
                     category=case.spec_name,
                     object_ids=assertion.failed,
-                    message=f"{case.spec_name}.\n"
-                    f"On {len(assertion.failed)} objects, assertion {assertion.assertion_type} failed.",
+                    message=format_error_message(case, assertion),
                 )
 
     if failed_count > 0:
@@ -81,6 +78,10 @@ def automate_function(
     # if the function generates file results, this is how it can be
     # attached to the Speckle project / model
     # automate_context.store_file_result("./report.pdf")
+
+
+def format_error_message(case, assertion) -> str:
+    return f"{case.spec_name}.\nOn {len(assertion.failed)} objects, assertion {assertion.assertion_type} failed."
 
 
 # make sure to call the function with the executor

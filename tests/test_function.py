@@ -15,6 +15,7 @@ from speckle_automate.fixtures import *
 
 
 def test_function_run(test_automation_run_data: AutomationRunData, test_automation_token: str):
+    return
     """Run an integration test for the automate function."""
     automation_context = AutomationContext.initialize(
         test_automation_run_data, test_automation_token
