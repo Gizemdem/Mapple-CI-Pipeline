@@ -1,15 +1,18 @@
-"""This module contains the business logic of the function.
+"""
+This module contains the business logic of the function.
 
-Use the automation_context module to wrap your function in an Autamate context helper
+Use the automation_context module to wrap your function in an
+  Automate context helper
 """
 
-from pydantic import Field, SecretStr
+from pydantic import Field
 from speckle_automate import (
     AutomateBase,
     AutomationContext,
     execute_automate_function,
 )
 import maple as mp
+from utils import get_funcs_from_url
 
 
 class FunctionInputs(AutomateBase):
@@ -20,18 +23,10 @@ class FunctionInputs(AutomateBase):
     https://docs.pydantic.dev/latest/usage/models/
     """
 
-    read_only: str = Field(
+    url: str = Field(
         default="Placeholder",
-        title="Automated Test Cases",
-        description=(
-            "checks window height is greater than 2600 mm"
-            "validates SIP 202mm wall type area is greater than 43 m2"
-            "checks pipes OmniClass value"
-            "validates basic roof`s thermal mass"
-            "validates columns assembly type."
-            "validates ceiling thickness is 50"
-            "checks there are exactly 55 walls"
-        ),
+        title="Tests Specs Gist/Github",
+        description=("Please paste the url of test specs."),
     )
 
 
@@ -52,9 +47,8 @@ def automate_function(
     version_root_object = automate_context.receive_version()
     mp.init(version_root_object)
 
-    from specs import spec_d, spec_e, spec_f, spec_g
-
-    mp.run(spec_d, spec_e, spec_f, spec_g)
+    specs_functions = get_funcs_from_url(function_inputs.url)
+    mp.run(*specs_functions)
 
     failed_count = 0
     for case in mp.test_cases:
@@ -66,8 +60,7 @@ def automate_function(
                 automate_context.attach_error_to_objects(
                     category=case.spec_name,
                     object_ids=assertion.failed,
-                    message=f"{case.spec_name}.\n"
-                    f"On {len(assertion.failed)} objects, assertion {assertion.assertion_type} failed.",
+                    message=format_error_message(case, assertion),
                 )
 
     if failed_count > 0:
@@ -87,14 +80,8 @@ def automate_function(
     # automate_context.store_file_result("./report.pdf")
 
 
-def automate_function_without_inputs(automate_context: AutomationContext) -> None:
-    """A function example without inputs.
-
-    If your function does not need any input variables,
-     besides what the automation context provides,
-     the inputs argument can be omitted.
-    """
-    pass
+def format_error_message(case, assertion) -> str:
+    return f"{case.spec_name}.\nOn {len(assertion.failed)} objects, assertion {assertion.assertion_type} failed."
 
 
 # make sure to call the function with the executor
