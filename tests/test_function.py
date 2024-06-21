@@ -1,7 +1,5 @@
 """Run integration tests with a speckle server."""
 
-from pydantic import SecretStr
-
 from speckle_automate import (
     AutomationContext,
     AutomationRunData,
@@ -15,7 +13,6 @@ from speckle_automate.fixtures import *
 
 
 def test_function_run(test_automation_run_data: AutomationRunData, test_automation_token: str):
-    return
     """Run an integration test for the automate function."""
     automation_context = AutomationContext.initialize(
         test_automation_run_data, test_automation_token
@@ -24,8 +21,7 @@ def test_function_run(test_automation_run_data: AutomationRunData, test_automati
         automation_context,
         automate_function,
         FunctionInputs(
-            forbidden_speckle_type="None",
-            whisper_message=SecretStr("testing automatically"),
+            url="https://gist.githubusercontent.com/andrsbtrg/1c6ebcfca23492b2dd899b43817ea88a/raw/4183c73c61816a36f0cfe0fc51ef0e2459aaf253"
         ),
     )
 
