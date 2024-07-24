@@ -1,7 +1,10 @@
-from utils import prepare_url, is_github_gist
+from utils import is_github_gist, prepare_url
 
 
 def test_clean_url():
+    """
+    Checks that
+    """
     url = "https://gist.githubusercontent.com/andrsbtrg/1c6ebcfca23492b2dd899b43817ea88a/raw/4183c73c61816a36f0cfe0fc51ef0e2459aaf253/specs.py"
 
     fixed_url = "https://gist.githubusercontent.com/andrsbtrg/1c6ebcfca23492b2dd899b43817ea88a/raw/4183c73c61816a36f0cfe0fc51ef0e2459aaf253"
