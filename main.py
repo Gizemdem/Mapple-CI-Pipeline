@@ -51,22 +51,22 @@ def automate_function(
     mp.run(*specs_functions)
 
     failed_count = 0
-    for case in mp.test_cases:
+    for case in mp.get_test_cases():
         assertions = case.assertions
         for assertion in assertions:
-            if len(assertion.failed) > 0:
+            if assertion.failed():
                 failed_count += 1
                 # this is how a run is marked with a failure cause
                 automate_context.attach_error_to_objects(
                     category=case.spec_name,
-                    object_ids=assertion.failed,
+                    object_ids=assertion.failing,
                     message=format_error_message(case, assertion),
                 )
 
     if failed_count > 0:
         automate_context.mark_run_failed(
             "Some tests failed: "
-            f"{failed_count} out of {len(mp.test_cases)} specs failed"
+            f"{failed_count} out of {len(mp.get_test_cases())} specs failed"
             "See the Results for more information."
         )
         # set the automation context view, to the original model / version view
